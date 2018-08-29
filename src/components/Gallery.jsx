@@ -18,8 +18,10 @@ class Gallery extends Component {
         <div className="backdrop" />
         <div className="gallery">
           <h2>{image.title}</h2>
-          <img src={image.img} alt={image.alt}></img>
-          <Link to="/"><button>Close</button></Link>
+          <img src={image.img} alt={image.alt} />
+          <Link to="/">
+            <button type="button">Close</button>
+          </Link>
         </div>
       </div>
     );

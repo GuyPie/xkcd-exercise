@@ -61,16 +61,14 @@ class App extends Component {
             <h1>{`Loaded ${comics.length} comics!`}</h1>
           </div>
           <div className="comics">
-            {comics.map(comic => {
-              return (
-                <Link to={{
-                  pathname: `/gallery/${comic.data.num}`,
-                  image: comic.data ,
-                }}>
-                  <img src={comic.data.img} alt={comic.data.alt} />
-                </Link>
-              );
-            })}
+            {comics.map(comic => (
+              <Link to={{
+                pathname: `/gallery/${comic.data.num}`,
+                image: comic.data ,
+              }}>
+                <img src={comic.data.img} alt={comic.data.alt} />
+              </Link>
+            ))}
           </div>
           <Route path="/gallery" component={Gallery} />
         </div>
