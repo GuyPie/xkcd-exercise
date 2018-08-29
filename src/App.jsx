@@ -33,8 +33,6 @@ class App extends Component {
     const el = document.getElementById('app');
 
     if (Math.floor(el.getBoundingClientRect().bottom) <= window.innerHeight + 20) {
-      console.log('header bottom reached');
-
       try {
         const comics = await getComics(startIndex, startIndex + 10);
         this.setState({
@@ -62,10 +60,13 @@ class App extends Component {
           </div>
           <div className="comics">
             {comics.map(comic => (
-              <Link to={{
-                pathname: `/gallery/${comic.data.num}`,
-                image: comic.data ,
-              }}>
+              <Link
+                to={{
+                  pathname: `/gallery/${comic.data.num}`,
+                  image: comic.data,
+                }}
+                key={comic.data.num}
+              >
                 <img src={comic.data.img} alt={comic.data.alt} />
               </Link>
             ))}
