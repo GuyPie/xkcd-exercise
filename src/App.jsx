@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 import { debounce } from 'lodash';
+import Gallery from './components/Gallery';
 import { getComics } from './api/xkcd';
 import './App.css';
 
@@ -44,18 +46,26 @@ class App extends Component {
     const { comics } = this.state;
 
     return (
-      <div id="app" className="app">
-        <div className="header">
-          <h1>{`Loaded ${comics.length} comics!`}</h1>
+      <BrowserRouter>
+        <div id="app" className="app">
+          <div className="header">
+            <h1>{`Loaded ${comics.length} comics!`}</h1>
+          </div>
+          <div className="comics">
+            {comics.map(comic => {
+              return (
+                <Link to={{
+                  pathname: `/gallery/${comic.data.num}`,
+                  image: comic.data ,
+                }}>
+                  <img src={comic.data.img} alt={comic.data.alt} />
+                </Link>
+              );
+            })}
+          </div>
+          <Route path="/gallery" component={Gallery} />
         </div>
-        <div className="comics">
-          {comics.map(comic => {
-            return (
-              <img src={comic.data.img} alt={comic.data.alt} />
-            );
-          })}
-        </div>
-      </div>
+      </BrowserRouter>
     );
   }
 }
