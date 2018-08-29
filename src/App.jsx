@@ -11,17 +11,14 @@ class App extends Component {
     this.state = {
       nextLoadStartIndex: 1,
       comics: [],
+      loadMore: true,
     };
     this.trackScrolling = debounce(this.trackScrolling.bind(this), 200);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     document.addEventListener('scroll', this.trackScrolling);
-    const comics = await getComics(1, 11);
-    this.setState({
-      comics,
-      nextLoadStartIndex: 11,
-    });
+    this.trackScrolling();
   }
   
   componentWillUnmount() {
@@ -29,16 +26,28 @@ class App extends Component {
   }
   
   async trackScrolling() {
-    const { nextLoadStartIndex: startIndex, comics: currComics } = this.state;
+    const { nextLoadStartIndex: startIndex, comics: currComics, loadMore } = this.state;
+
+    if (!loadMore) return;
+
     const el = document.getElementById('app');
 
-    if (Math.floor(el.getBoundingClientRect().bottom) <= window.innerHeight) {
+    if (Math.floor(el.getBoundingClientRect().bottom) <= window.innerHeight + 20) {
       console.log('header bottom reached');
-      const comics = await getComics(startIndex, startIndex + 10);
-      this.setState({
-        comics: currComics.concat(comics),
-        nextLoadStartIndex: startIndex + 10,
-      });
+
+      try {
+        const comics = await getComics(startIndex, startIndex + 10);
+        this.setState({
+          comics: currComics.concat(comics),
+          nextLoadStartIndex: startIndex + 10,
+          loadMore: true,
+        });
+      } catch (e) {
+        this.setState({
+          comics: currComics,
+          loadMore: false,
+        });
+      }
     }
   };
 
